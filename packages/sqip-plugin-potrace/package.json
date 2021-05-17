@@ -24,10 +24,10 @@
     "url": "https://github.com/axe312ger/sqip/issues"
   },
   "dependencies": {
-    "potrace": "^2.1.6",
+    "potrace": "^2.1.8",
     "sqip": "^1.0.0-alpha.32"
   },
   "devDependencies": {
-    "cheerio": "^1.0.0-rc.3"
+    "cheerio": "^1.0.0-rc.9"
   }
 }
