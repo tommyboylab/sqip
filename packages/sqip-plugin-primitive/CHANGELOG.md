@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.37](https://github.com/axe312ger/sqip/compare/sqip-plugin-primitive-tt@1.0.0-alpha.36...sqip-plugin-primitive-tt@1.0.0-alpha.37) (2021-05-17)
+
+
+### Bug Fixes
+
+* npm ([9b3f18e](https://github.com/axe312ger/sqip/commit/9b3f18e3afb4d98d1882d52873a03e3865c928c5))
+
+
+
+
+
 # 1.0.0-alpha.36 (2021-05-17)
 
 
