@@ -5,7 +5,7 @@ import os from 'os'
 import execa from 'execa'
 import Debug from 'debug'
 
-import { SqipPlugin, parseColor } from 'sqip'
+import { SqipPlugin, parseColor } from 'sqip-tt'
 
 const debug = Debug('sqip-plugin-primitive')
 

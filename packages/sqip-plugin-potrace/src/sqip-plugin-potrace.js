@@ -1,6 +1,6 @@
 import { promisify } from 'util'
 
-import { SqipPlugin, parseColor } from 'sqip'
+import { SqipPlugin, parseColor } from 'sqip-tt'
 
 import potrace from 'potrace'
 

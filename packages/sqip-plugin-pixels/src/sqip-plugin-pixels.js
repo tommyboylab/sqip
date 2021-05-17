@@ -2,7 +2,7 @@ import sharp from 'sharp'
 import { createSVGWindow } from 'svgdom'
 import { SVG, registerWindow } from '@svgdotjs/svg.js'
 
-import { SqipPlugin } from 'sqip'
+import { SqipPlugin } from 'sqip-tt'
 
 export default class PixelsPlugin extends SqipPlugin {
   static get cliOptions() {

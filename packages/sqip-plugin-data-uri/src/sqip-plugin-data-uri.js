@@ -1,4 +1,4 @@
-import { SqipPlugin } from 'sqip'
+import { SqipPlugin } from 'sqip-tt'
 import svgToMiniDataURI from 'mini-svg-data-uri'
 
 export default class DataUriPlugin extends SqipPlugin {

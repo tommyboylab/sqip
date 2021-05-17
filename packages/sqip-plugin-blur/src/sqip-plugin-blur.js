@@ -1,4 +1,4 @@
-import { loadSVG, SqipPlugin } from 'sqip'
+import { loadSVG, SqipPlugin } from 'sqip-tt'
 
 const PRIMITIVE_SVG_ELEMENTS = 'circle, ellipse, line, polygon, path, rect, g'
 

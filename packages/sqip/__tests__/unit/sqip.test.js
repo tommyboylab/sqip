@@ -2,11 +2,11 @@ import fs from 'fs-extra'
 import { resolve } from 'path'
 import { tmpdir } from 'os'
 
-import sqip from '../../src/sqip'
-import primitive from 'sqip-plugin-primitive'
-import blur from 'sqip-plugin-blur'
-import svgo from 'sqip-plugin-svgo'
-import datauri from 'sqip-plugin-data-uri'
+import sqip from '../../src/sqip-tt'
+import primitive from 'sqip-plugin-primitive-tt'
+import blur from 'sqip-plugin-blur-tt'
+import svgo from 'sqip-plugin-svgo-tt'
+import datauri from 'sqip-plugin-data-uri-tt'
 
 const FILE_NOT_EXIST = '/this/file/does/not/exist.jpg'
 const FILE_DEMO_BEACH = resolve(
@@ -22,10 +22,10 @@ const EXAMPLE_SVG =
 const logSpy = jest.spyOn(global.console, 'log').mockImplementation(() => {})
 const errorSpy = jest.spyOn(global.console, 'error')
 
-jest.mock('sqip-plugin-primitive')
-jest.mock('sqip-plugin-blur')
-jest.mock('sqip-plugin-svgo')
-jest.mock('sqip-plugin-data-uri')
+jest.mock('sqip-plugin-primitive-tt')
+jest.mock('sqip-plugin-blur-tt')
+jest.mock('sqip-plugin-svgo-tt')
+jest.mock('sqip-plugin-data-uri-tt')
 
 primitive.mockImplementation(function primitiveMock() {
   return {

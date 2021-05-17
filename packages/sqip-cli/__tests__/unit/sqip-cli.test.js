@@ -1,9 +1,9 @@
-import sqip from 'sqip'
-import sqipCLI from '../../src/sqip-cli'
+import sqip from 'sqip-tt'
+import sqipCLI from '../../src/sqip-cli-tt'
 
 import semver from 'semver'
 
-jest.mock('sqip', () => {
+jest.mock('sqip-tt', () => {
   const sqipMock = jest.fn()
   sqipMock.resolvePlugins = jest.fn((plugins) =>
     plugins.map((plugin) => ({
@@ -21,7 +21,7 @@ const errorSpy = jest
 
 global.process.exit = jest.fn()
 
-describe('sqip-plugin-cli', () => {
+describe('sqip-plugin-cli-tt', () => {
   afterEach(() => {
     logSpy.mockClear()
     errorSpy.mockClear()

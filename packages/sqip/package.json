@@ -49,10 +49,10 @@
     "term-img": "^6.0.0"
   },
   "peerDependencies": {
-    "sqip-plugin-blur-tt": "^1.0.0-alpha.0",
-    "sqip-plugin-data-uri-tt": "^1.0.0-alpha.0",
-    "sqip-plugin-primitive-tt": "^1.0.0-alpha.0",
-    "sqip-plugin-svgo-tt": "^1.0.0-alpha.0"
+    "sqip-plugin-blur-tt": "^1.0.0-alpha.36",
+    "sqip-plugin-data-uri-tt": "^1.0.0-alpha.36",
+    "sqip-plugin-primitive-tt": "^1.0.0-alpha.37",
+    "sqip-plugin-svgo-tt": "^1.0.0-alpha.36"
   },
   "devDependencies": {
     "debug": "^4.3.1"

@@ -1,7 +1,7 @@
 import { resolve } from 'path'
 import { readFileSync } from 'fs'
 
-import sqipPluginPixels from '../../src/sqip-plugin-pixels'
+import sqipPluginPixels from '../../src/sqip-plugin-pixels-tt'
 
 import cheerio from 'cheerio'
 

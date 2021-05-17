@@ -4,7 +4,7 @@ import Debug from 'debug'
 import commandLineArgs from 'command-line-args'
 import commandLineUsage from 'command-line-usage'
 
-import sqip, { resolvePlugins } from 'sqip'
+import sqip, { resolvePlugins } from 'sqip-tt'
 
 const { version } = require('../package.json')
 

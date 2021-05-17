@@ -3,7 +3,7 @@ import { readFileSync } from 'fs'
 
 import cheerio from 'cheerio'
 
-import sqipPluginPotrace from '../../src/sqip-plugin-potrace'
+import sqipPluginPotrace from '../../src/sqip-plugin-potrace-tt'
 
 const FILE_DEMO_BEACH = resolve(
   __dirname,
