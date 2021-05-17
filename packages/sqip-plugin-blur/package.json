@@ -1,5 +1,5 @@
 {
-  "name": "sqip-plugin-blur",
+  "name": "sqip-plugin-blur-tt",
   "version": "1.0.0-alpha.34",
   "description": "> TODO: description",
   "author": "Benedikt Rötsch <info@benedikt-roetsch.de>",
@@ -24,6 +24,7 @@
     "url": "https://github.com/axe312ger/sqip/issues"
   },
   "dependencies": {
-    "sqip": "^1.0.0-alpha.33"
-  }
+    "sqip-tt": "^1.0.0-alpha.33"
+  },
+  "gitHead": "8c0b2db59cca5ac10c78b950a699e86fb7c32c42"
 }

@@ -1,5 +1,5 @@
 {
-  "name": "sqip-plugin-pixels",
+  "name": "sqip-plugin-pixels-tt",
   "version": "1.0.0-alpha.33",
   "description": "Experimental plugin to create a pixelation effect",
   "author": "Benedikt Rötsch <info@benedikt-roetsch.de>",
@@ -26,11 +26,11 @@
   "dependencies": {
     "@svgdotjs/svg.js": "^3.0.16",
     "sharp": "^0.28.2",
-    "sqip": "^1.0.0-alpha.33",
+    "sqip-tt": "^1.0.0-alpha.33",
     "svgdom": "^0.1.8"
   },
   "devDependencies": {
     "cheerio": "^1.0.0-rc.9"
   },
-  "gitHead": "3bed73cc4f8557baad9e23a87dbee24b019c14ff"
+  "gitHead": "8c0b2db59cca5ac10c78b950a699e86fb7c32c42"
 }

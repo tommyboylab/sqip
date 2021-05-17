@@ -1,5 +1,5 @@
 {
-  "name": "sqip-plugin-primitive",
+  "name": "sqip-plugin-primitive-tt",
   "version": "1.0.0-alpha.35",
   "description": "> TODO: description",
   "author": "Benedikt Rötsch <info@benedikt-roetsch.de>",
@@ -29,6 +29,7 @@
     "debug": "^4.3.1",
     "execa": "^5.0.0",
     "fs-extra": "^10.0.0",
-    "sqip": "^1.0.0-alpha.33"
-  }
+    "sqip-tt": "^1.0.0-alpha.33"
+  },
+  "gitHead": "8c0b2db59cca5ac10c78b950a699e86fb7c32c42"
 }

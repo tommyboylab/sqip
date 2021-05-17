@@ -1,5 +1,5 @@
 {
-  "name": "sqip-monorepo",
+  "name": "sqip-monorepo-tt",
   "private": true,
   "scripts": {
     "prepare": "lerna run prepare",

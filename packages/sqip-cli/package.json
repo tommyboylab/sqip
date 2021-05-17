@@ -1,5 +1,5 @@
 {
-  "name": "sqip-cli",
+  "name": "sqip-cli-tt",
   "version": "1.0.0-alpha.37",
   "description": "> TODO: description",
   "author": "Benedikt Rötsch <info@benedikt-roetsch.de>",
@@ -31,15 +31,16 @@
     "command-line-usage": "^6.1.1",
     "debug": "^4.3.1",
     "sqip": "^1.0.0-alpha.33",
-    "sqip-plugin-blur": "^1.0.0-alpha.34",
-    "sqip-plugin-data-uri": "^1.0.0-alpha.34",
-    "sqip-plugin-primitive": "^1.0.0-alpha.35",
-    "sqip-plugin-svgo": "^1.0.0-alpha.34"
+    "sqip-plugin-blur-tt": "^1.0.0-alpha.34",
+    "sqip-plugin-data-uri-tt": "^1.0.0-alpha.34",
+    "sqip-plugin-primitive-tt": "^1.0.0-alpha.35",
+    "sqip-plugin-svgo-tt": "^1.0.0-alpha.34"
   },
   "devDependencies": {
     "cheerio": "^1.0.0-rc.9",
     "execa": "^5.0.0",
     "fs-extra": "^10.0.0",
     "semver": "^7.3.5"
-  }
+  },
+  "gitHead": "8c0b2db59cca5ac10c78b950a699e86fb7c32c42"
 }

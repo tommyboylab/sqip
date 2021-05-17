@@ -1,5 +1,5 @@
 {
-  "name": "sqip",
+  "name": "sqip-tt",
   "version": "1.0.0-alpha.33",
   "description": "> TODO: description",
   "author": "Benedikt Rötsch <info@benedikt-roetsch.de>",
@@ -49,12 +49,13 @@
     "term-img": "^6.0.0"
   },
   "peerDependencies": {
-    "sqip-plugin-blur": "^1.0.0-alpha.0",
-    "sqip-plugin-data-uri": "^1.0.0-alpha.0",
-    "sqip-plugin-primitive": "^1.0.0-alpha.0",
-    "sqip-plugin-svgo": "^1.0.0-alpha.0"
+    "sqip-plugin-blur-tt": "^1.0.0-alpha.0",
+    "sqip-plugin-data-uri-tt": "^1.0.0-alpha.0",
+    "sqip-plugin-primitive-tt": "^1.0.0-alpha.0",
+    "sqip-plugin-svgo-tt": "^1.0.0-alpha.0"
   },
   "devDependencies": {
     "debug": "^4.3.1"
-  }
+  },
+  "gitHead": "8c0b2db59cca5ac10c78b950a699e86fb7c32c42"
 }
