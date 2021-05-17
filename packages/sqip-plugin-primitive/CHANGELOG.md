@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.35](https://github.com/axe312ger/sqip/compare/sqip-plugin-primitive@1.0.0-alpha.34...sqip-plugin-primitive@1.0.0-alpha.35) (2021-05-17)
+
+
+### Bug Fixes
+
+* add vendor to package for install ([7fb000e](https://github.com/axe312ger/sqip/commit/7fb000eb5b09f8ffba4ddd0006534cb2255d141e))
+
+
+
+
+
 # [1.0.0-alpha.34](https://github.com/axe312ger/sqip/compare/sqip-plugin-primitive@1.0.0-alpha.33...sqip-plugin-primitive@1.0.0-alpha.34) (2020-06-21)
 
 **Note:** Version bump only for package sqip-plugin-primitive
