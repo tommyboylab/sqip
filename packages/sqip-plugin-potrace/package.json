@@ -1,6 +1,6 @@
 {
   "name": "sqip-plugin-potrace-tt",
-  "version": "1.0.0-alpha.5",
+  "version": "1.0.0-alpha.6",
   "description": "> TODO: description",
   "author": "Benedikt Rötsch <info@benedikt-roetsch.de>",
   "homepage": "https://github.com/axe312ger/sqip#readme",
@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "potrace": "^2.1.8",
-    "sqip-tt": "^1.0.0-alpha.33"
+    "sqip-tt": "^1.0.0-alpha.34"
   },
   "devDependencies": {
     "cheerio": "^1.0.0-rc.9"
