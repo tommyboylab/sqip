@@ -1,6 +1,6 @@
 {
   "name": "sqip-plugin-primitive-tt",
-  "version": "1.0.0-alpha.37",
+  "version": "1.0.0-alpha.38",
   "description": "> TODO: description",
   "author": "Benedikt Rötsch <info@benedikt-roetsch.de>",
   "homepage": "https://github.com/axe312ger/sqip#readme",
@@ -29,7 +29,7 @@
     "debug": "^4.3.1",
     "execa": "^5.0.0",
     "fs-extra": "^10.0.0",
-    "sqip-tt": "^1.0.0-alpha.35"
+    "sqip-tt": "^1.0.0-alpha.36"
   },
   "gitHead": "d03682891bd72b8c89bc83515a115ef07f60caf0"
 }

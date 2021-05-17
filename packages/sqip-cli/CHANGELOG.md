@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.40](https://github.com/axe312ger/sqip/compare/sqip-cli-tt@1.0.0-alpha.39...sqip-cli-tt@1.0.0-alpha.40) (2021-05-17)
+
+
+### Bug Fixes
+
+* change deps to reflect repository ([b6efd7f](https://github.com/axe312ger/sqip/commit/b6efd7fb27839bd94c67bfce465a19983e9c5645))
+
+
+
+
+
 # [1.0.0-alpha.39](https://github.com/axe312ger/sqip/compare/sqip-cli-tt@1.0.0-alpha.38...sqip-cli-tt@1.0.0-alpha.39) (2021-05-17)
 
 

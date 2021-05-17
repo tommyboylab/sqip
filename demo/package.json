@@ -1,6 +1,6 @@
 {
   "name": "sqip-demo",
-  "version": "1.0.0-alpha.36",
+  "version": "1.0.0-alpha.37",
   "main": "index.html",
   "repository": "http://axe312ger.github.io/sqip",
   "author": "Benedikt Rötsch <info@benedikt-roetsch.de>",
@@ -26,14 +26,14 @@
     "pretty-bytes": "^5.2.0",
     "probe-image-size": "^5.0.0",
     "sharp": "^0.25.4",
-    "sqip-tt": "^1.0.0-alpha.35",
     "sqip-legacy": "npm:sqip@legacy",
-    "sqip-plugin-blur-tt": "^1.0.0-alpha.36",
-    "sqip-plugin-data-uri-tt": "^1.0.0-alpha.36",
-    "sqip-plugin-pixels-tt": "^1.0.0-alpha.35",
-    "sqip-plugin-potrace-tt": "^1.0.0-alpha.7",
-    "sqip-plugin-primitive-tt": "^1.0.0-alpha.37",
+    "sqip-plugin-blur-tt": "^1.0.0-alpha.37",
+    "sqip-plugin-data-uri-tt": "^1.0.0-alpha.37",
+    "sqip-plugin-pixels-tt": "^1.0.0-alpha.36",
+    "sqip-plugin-potrace-tt": "^1.0.0-alpha.8",
+    "sqip-plugin-primitive-tt": "^1.0.0-alpha.38",
     "sqip-plugin-svgo-tt": "^1.0.0-alpha.36",
+    "sqip-tt": "^1.0.0-alpha.36",
     "vhtml": "^2.2.0"
   },
   "devDependencies": {

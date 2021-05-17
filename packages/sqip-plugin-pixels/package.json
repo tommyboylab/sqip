@@ -1,6 +1,6 @@
 {
   "name": "sqip-plugin-pixels-tt",
-  "version": "1.0.0-alpha.35",
+  "version": "1.0.0-alpha.36",
   "description": "Experimental plugin to create a pixelation effect",
   "author": "Benedikt Rötsch <info@benedikt-roetsch.de>",
   "homepage": "https://github.com/axe312ger/sqip#readme",
@@ -26,7 +26,7 @@
   "dependencies": {
     "@svgdotjs/svg.js": "^3.0.16",
     "sharp": "^0.28.2",
-    "sqip-tt": "^1.0.0-alpha.35",
+    "sqip-tt": "^1.0.0-alpha.36",
     "svgdom": "^0.1.8"
   },
   "devDependencies": {
