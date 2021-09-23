@@ -1,32 +1,11 @@
-import { access } from 'fs/promises'
-import { constants } from 'fs'
+import fs from 'fs-extra'
 import path from 'path'
 import os from 'os'
 
 import execa from 'execa'
 import Debug from 'debug'
 
-import {
-  SqipPlugin,
-  parseColor,
-  SqipPluginOptions,
-  PluginOptions,
-  SqipCliOptionDefinition,
-  SqipImageMetadata
-} from 'sqip'
-
-interface PrimitivePluginOptions extends SqipPluginOptions {
-  options: PrimitiveOptions
-}
-
-interface PrimitiveOptions extends PluginOptions {
-  numberOfPrimitives?: number
-  mode?: number
-  rep?: number
-  alpha?: number
-  background?: string
-  cores?: number
-}
+import { SqipPlugin, parseColor } from 'sqip-tt'
 
 const debug = Debug('sqip-plugin-primitive')
 
@@ -34,16 +13,11 @@ const VENDOR_DIR = path.resolve(__dirname, '..', 'vendor')
 let primitiveExecutable = 'primitive'
 
 // Since Primitive is only interested in the larger dimension of the input image, let's find it
-const findLargerImageDimension = ({
-  width,
-  height
-}: {
-  width: number
-  height: number
-}) => (width > height ? width : height)
+const findLargerImageDimension = ({ width, height }) =>
+  width > height ? width : height
 
 export default class PrimitivePlugin extends SqipPlugin {
-  static get cliOptions(): SqipCliOptionDefinition[] {
+  static get cliOptions() {
     return [
       {
         name: 'numberOfPrimitives',
@@ -97,10 +71,8 @@ export default class PrimitivePlugin extends SqipPlugin {
     ]
   }
 
-  constructor(options: PrimitivePluginOptions) {
-    super(options)
-    const { pluginOptions } = options
-
+  constructor({ pluginOptions }) {
+    super(...arguments)
     this.options = {
       numberOfPrimitives: 8,
       mode: 0,
@@ -112,13 +84,8 @@ export default class PrimitivePlugin extends SqipPlugin {
     }
   }
 
-  public options: PrimitiveOptions
-
-  async apply(
-    imageBuffer: Buffer,
-    metadata: SqipImageMetadata
-  ): Promise<Buffer> {
-    if (metadata.type === 'svg') {
+  async apply(imageBuffer) {
+    if (this.metadata.type === 'svg') {
       throw new Error(
         'Primitive needs a raster image buffer as input. Check if you run this plugin in the first place.'
       )
@@ -134,13 +101,11 @@ export default class PrimitivePlugin extends SqipPlugin {
       cores
     } = this.options
 
-    const { width, height, palette } = metadata
+    const { width, height, palette } = this.metadata
 
-    const background = userBg
-      ? parseColor({ color: userBg, palette })
-      : palette['Muted']?.hex
+    const background = parseColor({ color: userBg, palette })
 
-    const result = await execa(
+    const { stdout } = await execa(
       primitiveExecutable,
       [
         '-i',
@@ -148,59 +113,53 @@ export default class PrimitivePlugin extends SqipPlugin {
         '-o',
         '-',
         '-n',
-        String(numberOfPrimitives),
+        numberOfPrimitives,
         '-m',
-        String(mode),
+        mode,
         '-s',
-        String(findLargerImageDimension({ width, height })),
+        findLargerImageDimension({ width, height }),
         '-rep',
-        String(rep),
+        rep,
         '-a',
-        String(alpha),
+        alpha,
         '-bg',
-        String(background),
+        background,
         '-j',
-        String(cores)
+        cores
       ],
       { input: imageBuffer }
     )
 
-    metadata.type = 'svg'
+    this.metadata.type = 'svg'
 
-    return Buffer.from(result.stdout)
+    return stdout
   }
 
   // Sanity check: use the exit state of 'type' to check for Primitive availability
-  async checkForPrimitive(): Promise<undefined> {
+  async checkForPrimitive() {
     const platform = os.platform()
     const primitivePath = path.join(
       VENDOR_DIR,
       `primitive-${platform}-${os.arch()}${platform === 'win32' ? '.exe' : ''}`
     )
 
-    try {
-      await access(primitivePath, constants.X_OK)
-      debug(`Found primitive binary at ${primitivePath}`)
+    debug(`Trying to locate primitive binary at ${primitivePath}`)
+
+    if (await fs.exists(primitivePath)) {
       primitiveExecutable = primitivePath
       return
-    } catch (e) {
-      // noop
     }
 
-    // Test if primitive is available as global executable
+    const errorMessage =
+      'Please ensure that Primitive (https://github.com/fogleman/primitive, written in Golang) is installed and globally available'
     try {
-      if (platform === 'win32') {
+      if (os.platform() === 'win32') {
         await execa('where', ['primitive'])
       } else {
         await execa('type', ['primitive'])
       }
     } catch (e) {
-      throw new Error(
-        'Please ensure that Primitive (https://github.com/fogleman/primitive, written in Golang) is installed and globally available.'
-      )
+      throw new Error(errorMessage)
     }
-
-    debug(`Found globally available primitive binary`)
-    primitiveExecutable = 'primitive'
   }
 }

@@ -2,34 +2,10 @@ import sharp from 'sharp'
 import { createSVGWindow } from 'svgdom'
 import { SVG, registerWindow } from '@svgdotjs/svg.js'
 
-import {
-  PluginOptions,
-  SqipCliOptionDefinition,
-  SqipImageMetadata,
-  SqipPlugin,
-  SqipPluginOptions
-} from 'sqip'
-
-declare module '@svgdotjs/svg.js' {
-  export function registerWindow(window: unknown, document: unknown): unknown
-}
-
-interface PixelOptions extends PluginOptions {
-  width?: number
-  pixelSize?: number
-}
-
-interface PixelConfig extends PluginOptions {
-  width: number
-  pixelSize: number
-}
-
-interface PixelPluginOptions extends SqipPluginOptions {
-  pluginOptions: PixelOptions
-}
+import { SqipPlugin } from 'sqip-tt'
 
 export default class PixelsPlugin extends SqipPlugin {
-  static get cliOptions(): SqipCliOptionDefinition[] {
+  static get cliOptions() {
     return [
       {
         name: 'width',
@@ -44,18 +20,10 @@ export default class PixelsPlugin extends SqipPlugin {
       }
     ]
   }
-  public options: PixelConfig
 
-  constructor(options: PixelPluginOptions) {
-    super(options)
-
-    const { pluginOptions } = options
-
-    this.options = Object.assign(
-      {},
-      { width: 8, pixelSize: 100 },
-      pluginOptions
-    )
+  constructor({ pluginOptions }) {
+    super(...arguments)
+    this.options = { width: 8, pixelSize: 100, ...pluginOptions }
 
     const window = createSVGWindow()
     const document = window.document
@@ -63,11 +31,8 @@ export default class PixelsPlugin extends SqipPlugin {
     registerWindow(window, document)
   }
 
-  async apply(
-    imageBuffer: Buffer,
-    metadata: SqipImageMetadata
-  ): Promise<Buffer> {
-    if (metadata.type === 'svg') {
+  async apply(imageBuffer) {
+    if (this.metadata.type === 'svg') {
       throw new Error(
         'The pixels plugin needs a raster image buffer as input. Check if you run this plugin in the first place.'
       )
@@ -85,10 +50,10 @@ export default class PixelsPlugin extends SqipPlugin {
 
     const canvas = SVG().size(info.width * pixelSize, info.height * pixelSize)
 
-    for (let i = 0; i < data.length; i += info.channels) {
-      const red = data[i]
-      const green = data[i + 1]
-      const blue = data[i + 2]
+    for (var i = 0; i < data.length; i += info.channels) {
+      var red = data[i]
+      var green = data[i + 1]
+      var blue = data[i + 2]
       canvas
         .rect(1 * pixelSize, 1 * pixelSize)
         .attr({ fill: `rgb(${red},${green},${blue})` })

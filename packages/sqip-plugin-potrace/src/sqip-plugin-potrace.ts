@@ -1,29 +1,14 @@
 import { promisify } from 'util'
 
-import {
-  SqipPlugin,
-  parseColor,
-  SqipPluginOptions,
-  PluginOptions,
-  SqipCliOptionDefinition,
-  SqipImageMetadata
-} from 'sqip'
+import { SqipPlugin, parseColor } from 'sqip-tt'
 
-import potrace, { PotraceDefaultOptions } from 'potrace'
+import potrace from 'potrace'
 
 const trace = promisify(potrace.trace)
 const posterize = promisify(potrace.posterize)
 
-interface PotracePluginOptions extends SqipPluginOptions {
-  pluginOptions: Partial<PotraceOptions> & { [key: string]: unknown }
-}
-
-interface PotraceOptions extends PotraceDefaultOptions, PluginOptions {
-  posterize: boolean
-}
-
 export default class sqipPluginPotrace extends SqipPlugin {
-  static get cliOptions(): SqipCliOptionDefinition[] {
+  static get cliOptions() {
     return [
       {
         name: 'color',
@@ -96,11 +81,8 @@ export default class sqipPluginPotrace extends SqipPlugin {
     ]
   }
 
-  public options: PotraceOptions
-
-  constructor(options: PotracePluginOptions) {
-    super(options)
-    const { pluginOptions } = options
+  constructor({ pluginOptions }) {
+    super(...arguments)
     const turnPolicy =
       (pluginOptions &&
         pluginOptions.turnPolicy &&
@@ -108,7 +90,6 @@ export default class sqipPluginPotrace extends SqipPlugin {
       potrace.Potrace.TURNPOLICY_MINORITY
 
     this.options = {
-      posterize: false,
       steps: 4,
       turdSize: 2,
       alphaMax: 1,
@@ -123,11 +104,8 @@ export default class sqipPluginPotrace extends SqipPlugin {
     }
   }
 
-  async apply(
-    imageBuffer: Buffer,
-    metadata: SqipImageMetadata
-  ): Promise<Buffer> {
-    if (metadata.type === 'svg') {
+  async apply(imageBuffer) {
+    if (this.metadata.type === 'svg') {
       throw new Error(
         'The pixels plugin needs a raster image as input. Check if you run this plugin in the first place.'
       )
@@ -146,18 +124,20 @@ export default class sqipPluginPotrace extends SqipPlugin {
       steps
     } = this.options
 
-    const { palette } = metadata
+    const { palette } = this.metadata
 
     if (this.options.posterize) {
       const background =
-        (userBackground === 'COLOR_AUTO' && palette.DarkMuted?.hex) ||
-        parseColor({ color: userBackground, palette })
+        userBackground === 'COLOR_AUTO'
+          ? palette.DarkMuted.getHex()
+          : parseColor({ color: userBackground, palette })
       const color =
-        (userColor === 'COLOR_AUTO' && palette.LightVibrant?.hex) ||
-        parseColor({ color: userColor, palette })
+        userColor === 'COLOR_AUTO'
+          ? palette.LightVibrant.getHex()
+          : parseColor({ color: userColor, palette })
 
       const result = await posterize(imageBuffer, {
-        steps: Number(steps),
+        steps,
         background,
         color,
         turnPolicy,
@@ -177,8 +157,9 @@ export default class sqipPluginPotrace extends SqipPlugin {
         ? 'transparent'
         : parseColor({ color: userBackground, palette })
     const color =
-      (userColor === 'COLOR_AUTO' && palette.Vibrant?.hex) ||
-      parseColor({ color: userColor, palette })
+      userColor === 'COLOR_AUTO'
+        ? palette.Vibrant.getHex()
+        : parseColor({ color: userColor, palette })
 
     const result = await trace(imageBuffer, {
       background,

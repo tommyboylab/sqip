@@ -1,22 +1,15 @@
-import {
-  loadSVG,
-  PluginOptions,
-  SqipPlugin,
-  SqipPluginOptions,
-  SqipCliOptionDefinition,
-  SqipImageMetadata
-} from 'sqip'
+import { loadSVG, SqipPlugin } from 'sqip-tt'
 
 const PRIMITIVE_SVG_ELEMENTS = 'circle, ellipse, line, polygon, path, rect, g'
 
-const patchSVGGroup = (svg: string): string => {
+const patchSVGGroup = (svg) => {
   const $ = loadSVG(svg)
 
   const $svg = $('svg')
   const $primitiveShapes = $svg.children(PRIMITIVE_SVG_ELEMENTS)
 
   // Check if actual shapes are grouped
-  if ($primitiveShapes.filter('g').length === 1) {
+  if (!$primitiveShapes.filter('g').length !== 1) {
     const $group = $('<g/>')
     const $realShapes = $primitiveShapes.not('rect:first-child')
 
@@ -27,16 +20,8 @@ const patchSVGGroup = (svg: string): string => {
   return $.html()
 }
 
-interface BlurPluginOptions extends SqipPluginOptions {
-  options: BlurOptions
-}
-
-interface BlurOptions extends PluginOptions {
-  blur?: number
-}
-
 export default class SVGPlugin extends SqipPlugin {
-  static get cliOptions(): SqipCliOptionDefinition[] {
+  static get cliOptions() {
     return [
       {
         name: 'blur',
@@ -48,14 +33,13 @@ export default class SVGPlugin extends SqipPlugin {
       }
     ]
   }
-  constructor(options: BlurPluginOptions) {
-    super(options)
-    const { pluginOptions } = options
+  constructor({ pluginOptions }) {
+    super(...arguments)
     this.options = { blur: 12, ...pluginOptions }
   }
 
-  apply(imageBuffer: Buffer, metadata: SqipImageMetadata): Buffer {
-    let svg = this.prepareSVG(imageBuffer.toString(), metadata)
+  apply(imageBuffer) {
+    let svg = this.prepareSVG(imageBuffer.toString())
     if (this.options.blur) {
       svg = this.applyBlurFilter(svg)
     }
@@ -63,10 +47,10 @@ export default class SVGPlugin extends SqipPlugin {
   }
 
   // Prepare SVG. For now, this will just ensure that the viewbox attribute is set
-  prepareSVG(svg: string, metadata: SqipImageMetadata): string {
+  prepareSVG(svg) {
     const $ = loadSVG(svg)
     const $svg = $('svg')
-    const { width, height } = metadata
+    const { width, height } = this.metadata
 
     // Ensure viewbox
     if (!$svg.is('[viewBox]')) {
@@ -92,8 +76,8 @@ export default class SVGPlugin extends SqipPlugin {
 
     // Remove x and y attributes since they default to 0
     // @todo test in rare browsers
-    $bgRect.removeAttr('x')
-    $bgRect.removeAttr('y')
+    $bgRect.attr('x', null)
+    $bgRect.attr('y', null)
 
     // Improve compression via simplifying fill
     $bgRect.attr('width', '100%')
@@ -102,7 +86,7 @@ export default class SVGPlugin extends SqipPlugin {
     return $.html()
   }
 
-  applyBlurFilter(svg: string): string {
+  applyBlurFilter(svg) {
     if (!this.options.blur) {
       return svg
     }

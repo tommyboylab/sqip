@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.37](http://axe312ger.github.io/sqip/compare/sqip-demo@1.0.0-alpha.36...sqip-demo@1.0.0-alpha.37) (2021-05-17)
+
+
+### Bug Fixes
+
+* change deps to reflect repository ([b6efd7f](http://axe312ger.github.io/sqip/commit/b6efd7fb27839bd94c67bfce465a19983e9c5645))
+
+
+
+
+
+# [1.0.0-alpha.36](http://axe312ger.github.io/sqip/compare/sqip-demo@1.0.0-alpha.35...sqip-demo@1.0.0-alpha.36) (2021-05-17)
+
+**Note:** Version bump only for package sqip-demo
+
+
+
+
+
 # [1.0.0-alpha.35](http://axe312ger.github.io/sqip/compare/sqip-demo@1.0.0-alpha.34...sqip-demo@1.0.0-alpha.35) (2020-06-21)
 
 **Note:** Version bump only for package sqip-demo
