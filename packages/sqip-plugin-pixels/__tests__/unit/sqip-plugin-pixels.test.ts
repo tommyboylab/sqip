@@ -3,7 +3,10 @@ import { readFileSync } from 'fs'
 
 import sqipPluginPixels from '../../src/sqip-plugin-pixels-tt'
 
+import { Swatch } from '@vibrant/color'
+
 import cheerio from 'cheerio'
+import { SqipImageMetadata } from 'sqip/src/sqip'
 
 const FILE_DEMO_BEACH = resolve(
   __dirname,
@@ -14,10 +17,36 @@ const FILE_DEMO_BEACH = resolve(
 )
 const fileContent = readFileSync(FILE_DEMO_BEACH)
 
+const mockedSwatch = new Swatch([4, 2, 0], 420)
+const mockedMetadata: SqipImageMetadata = {
+  height: 0,
+  width: 0,
+  originalHeight: 0,
+  originalWidth: 0,
+  palette: {
+    DarkMuted: mockedSwatch,
+    DarkVibrant: mockedSwatch,
+    LightMuted: mockedSwatch,
+    LightVibrant: mockedSwatch,
+    Muted: mockedSwatch,
+    Vibrant: mockedSwatch
+  },
+  type: 'pixel'
+}
+const mockedConfig = {
+  input: 'mocked',
+  output: 'mocked',
+  plugins: ['pixels']
+}
+
 describe('sqip-plugin-pixels', () => {
   it('default output', async () => {
-    const plugin = new sqipPluginPixels({})
-    const result = await plugin.apply(fileContent)
+    const plugin = new sqipPluginPixels({
+      pluginOptions: {},
+      options: {},
+      sqipConfig: mockedConfig
+    })
+    const result = await plugin.apply(fileContent, mockedMetadata)
 
     const $ = cheerio.load(result, { xml: true })
 
@@ -26,14 +55,19 @@ describe('sqip-plugin-pixels', () => {
     const $rects = $('svg > rect')
     expect($rects).toHaveLength(8 * 5)
     const firstRect = $('svg > rect').get(0)
+    if (!firstRect) {
+      throw new Error('error parsing pixels result. no rect found.')
+    }
     expect(firstRect.attribs.width).toEqual('100')
   })
 
   it('custom config', async () => {
     const plugin = new sqipPluginPixels({
-      pluginOptions: { width: 16, pixelSize: 50 }
+      pluginOptions: { width: 16, pixelSize: 50 },
+      options: {},
+      sqipConfig: mockedConfig
     })
-    const result = await plugin.apply(fileContent)
+    const result = await plugin.apply(fileContent, mockedMetadata)
 
     const $ = cheerio.load(result, { xml: true })
 
@@ -42,6 +76,9 @@ describe('sqip-plugin-pixels', () => {
     const $rects = $('svg > rect')
     expect($rects).toHaveLength(16 * 10)
     const firstRect = $('svg > rect').get(0)
+    if (!firstRect) {
+      throw new Error('error parsing pixels result. no rect found.')
+    }
     expect(firstRect.attribs.width).toEqual('50')
   })
 })

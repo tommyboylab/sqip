@@ -1,5 +1,29 @@
 import SvgPlugin from '../../src/sqip-plugin-blur'
 
+import { Swatch } from '@vibrant/color'
+import { SqipImageMetadata } from 'sqip/src/sqip'
+
+const mockedMetadata: SqipImageMetadata = {
+  width: 1024,
+  height: 640,
+  type: 'svg',
+  originalHeight: 1024,
+  originalWidth: 640,
+  palette: {
+    DarkMuted: new Swatch([4, 2, 0], 420),
+    DarkVibrant: new Swatch([4, 2, 1], 421),
+    LightMuted: new Swatch([4, 2, 2], 422),
+    LightVibrant: new Swatch([4, 2, 3], 423),
+    Muted: new Swatch([4, 2, 4], 424),
+    Vibrant: new Swatch([4, 2, 5], 425)
+  }
+}
+const mockedConfig = {
+  input: 'mocked',
+  output: 'mocked',
+  plugins: ['blur']
+}
+
 const sampleNoViewBox =
   '<svg><rect fill="#bada55"/><g><path fill="#C0FFEE" d="M51.5 17.5l4 18 15 1z"/></g></svg>'
 const sampleNoBg =
@@ -9,38 +33,27 @@ const sampleWithGroup =
 const sampleWithoutGroup =
   '<svg viewBox="0 0 1024 768"><rect fill="#bada55"/><polygon points="0,100 50,25 50,75 100,0" /></svg>'
 
-const metadata = {
-  width: 1024,
-  height: 640,
-  type: 'svg'
-}
-
-describe('does prepare svg properly', () => {
-  const svgPlugin = new SvgPlugin({})
-  test('svg without viewport, not given width & height', () => {
-    expect(() =>
-      svgPlugin.prepareSVG(sampleNoViewBox, {})
-    ).toThrowErrorMatchingSnapshot()
+describe('does prepare problematic svgs properly for blurring', () => {
+  const svgPlugin = new SvgPlugin({
+    pluginOptions: {},
+    options: {},
+    sqipConfig: mockedConfig
   })
-  test('svg without viewport, given width & height', () => {
-    const svgPlugin = new SvgPlugin({ metadata })
-    const result = svgPlugin.prepareSVG(sampleNoViewBox)
+  test('svg without viewport, but given width & height', () => {
+    const result = svgPlugin.prepareSVG(sampleNoViewBox, mockedMetadata)
     expect(result).toMatchSnapshot()
   })
-  test('svg with group, with config', () => {
-    const svgPlugin = new SvgPlugin({ metadata })
-    const result = svgPlugin.prepareSVG(sampleWithGroup)
+  test('svg with group', () => {
+    const result = svgPlugin.prepareSVG(sampleWithGroup, mockedMetadata)
     expect(result).toMatchSnapshot()
   })
-  test('svg without group, config with dimensions only', () => {
-    const svgPlugin = new SvgPlugin({ metadata })
-    const result = svgPlugin.prepareSVG(sampleWithoutGroup)
+  test('svg without group', () => {
+    const result = svgPlugin.prepareSVG(sampleWithoutGroup, mockedMetadata)
     expect(result).toMatchSnapshot()
   })
   test('svg with missing background', () => {
-    const svgPlugin = new SvgPlugin({ metadata })
     expect(() =>
-      svgPlugin.prepareSVG(sampleNoBg)
+      svgPlugin.prepareSVG(sampleNoBg, mockedMetadata)
     ).toThrowErrorMatchingSnapshot()
   })
 })
@@ -48,7 +61,8 @@ describe('does prepare svg properly', () => {
 describe('applies blur filter', () => {
   test('do nothing when no blur is given', () => {
     const svgPlugin = new SvgPlugin({
-      metadata,
+      options: {},
+      sqipConfig: mockedConfig,
       pluginOptions: {
         blur: 0
       }
@@ -58,7 +72,8 @@ describe('applies blur filter', () => {
   })
   test('svg with group and blur', () => {
     const svgPlugin = new SvgPlugin({
-      metadata,
+      options: {},
+      sqipConfig: mockedConfig,
       pluginOptions: {
         blur: 5
       }
@@ -68,7 +83,8 @@ describe('applies blur filter', () => {
   })
   test('svg without group and blur', () => {
     const svgPlugin = new SvgPlugin({
-      metadata,
+      options: {},
+      sqipConfig: mockedConfig,
       pluginOptions: {
         blur: 5
       }

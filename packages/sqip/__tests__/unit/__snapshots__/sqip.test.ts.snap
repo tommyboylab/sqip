@@ -1,0 +1,212 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`node api accepts buffers as input 1`] = `
+Object {
+  "content": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 100 100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" fill=\\"red\\" stroke=\\"#000\\" stroke-width=\\"3\\"/></svg>",
+  "metadata": Object {
+    "dataURI": "data:image/svg+xml,dataURI",
+    "dataURIBase64": "data:image/svg+xml;base64,dataURIBase64==",
+    "height": 188,
+    "originalHeight": 640,
+    "originalWidth": 1024,
+    "palette": Object {
+      "DarkMuted": Object {
+        "population": 17029,
+        "rgb": Array [
+          105,
+          78,
+          53,
+        ],
+      },
+      "DarkVibrant": Object {
+        "population": 131,
+        "rgb": Array [
+          190,
+          78,
+          12,
+        ],
+      },
+      "LightMuted": Object {
+        "population": 51394,
+        "rgb": Array [
+          207,
+          200,
+          183,
+        ],
+      },
+      "LightVibrant": Object {
+        "population": 15762,
+        "rgb": Array [
+          242,
+          177,
+          122,
+        ],
+      },
+      "Muted": Object {
+        "population": 17204,
+        "rgb": Array [
+          92,
+          143,
+          164,
+        ],
+      },
+      "Vibrant": Object {
+        "population": 4821,
+        "rgb": Array [
+          221,
+          133,
+          47,
+        ],
+      },
+    },
+    "type": "unknown",
+    "width": 300,
+  },
+}
+`;
+
+exports[`node api output outputs to file path 1`] = `
+Object {
+  "content": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 100 100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" fill=\\"red\\" stroke=\\"#000\\" stroke-width=\\"3\\"/></svg>",
+  "metadata": Object {
+    "dataURI": "data:image/svg+xml,dataURI",
+    "dataURIBase64": "data:image/svg+xml;base64,dataURIBase64==",
+    "height": 188,
+    "originalHeight": 640,
+    "originalWidth": 1024,
+    "palette": Object {
+      "DarkMuted": Object {
+        "population": 17029,
+        "rgb": Array [
+          105,
+          78,
+          53,
+        ],
+      },
+      "DarkVibrant": Object {
+        "population": 131,
+        "rgb": Array [
+          190,
+          78,
+          12,
+        ],
+      },
+      "LightMuted": Object {
+        "population": 51394,
+        "rgb": Array [
+          207,
+          200,
+          183,
+        ],
+      },
+      "LightVibrant": Object {
+        "population": 15762,
+        "rgb": Array [
+          242,
+          177,
+          122,
+        ],
+      },
+      "Muted": Object {
+        "population": 17204,
+        "rgb": Array [
+          92,
+          143,
+          164,
+        ],
+      },
+      "Vibrant": Object {
+        "population": 4821,
+        "rgb": Array [
+          221,
+          133,
+          47,
+        ],
+      },
+    },
+    "type": "unknown",
+    "width": 300,
+  },
+}
+`;
+
+exports[`node api resolves valid input path 1`] = `
+Object {
+  "content": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 100 100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" fill=\\"red\\" stroke=\\"#000\\" stroke-width=\\"3\\"/></svg>",
+  "metadata": Object {
+    "dataURI": "data:image/svg+xml,dataURI",
+    "dataURIBase64": "data:image/svg+xml;base64,dataURIBase64==",
+    "height": 188,
+    "originalHeight": 640,
+    "originalWidth": 1024,
+    "palette": Object {
+      "DarkMuted": Object {
+        "population": 17029,
+        "rgb": Array [
+          105,
+          78,
+          53,
+        ],
+      },
+      "DarkVibrant": Object {
+        "population": 131,
+        "rgb": Array [
+          190,
+          78,
+          12,
+        ],
+      },
+      "LightMuted": Object {
+        "population": 51394,
+        "rgb": Array [
+          207,
+          200,
+          183,
+        ],
+      },
+      "LightVibrant": Object {
+        "population": 15762,
+        "rgb": Array [
+          242,
+          177,
+          122,
+        ],
+      },
+      "Muted": Object {
+        "population": 17204,
+        "rgb": Array [
+          92,
+          143,
+          164,
+        ],
+      },
+      "Vibrant": Object {
+        "population": 4821,
+        "rgb": Array [
+          221,
+          133,
+          47,
+        ],
+      },
+    },
+    "type": "unknown",
+    "width": 300,
+  },
+}
+`;
+
+exports[`node api throws nicely when plugin not found 1`] = `
+"Unable to load plugin \\"sqip-plugin-i-dont-exist\\". Try installing it via:
+
+ npm install sqip-plugin-i-dont-exist"
+`;
+
+exports[`node api throws when empty input is passed 1`] = `"Please provide an input image, e.g. sqip({ input: \\"input.jpg\\" })"`;
+
+exports[`node api throws when invalid input path is passed 1`] = `
+"Unable to find any files via /this/file/does/not/exist.jpg. Make sure the file exists.
+
+If you are using globbing patterns, the following features are supported:
+
+https://github.com/micromatch/micromatch#matching-features"
+`;

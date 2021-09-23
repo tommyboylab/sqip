@@ -9,13 +9,18 @@ import termimg from 'term-img'
 import Table from 'cli-table3'
 import chalk from 'chalk'
 
+import { Palette } from '@vibrant/color'
+import { OptionDefinition } from 'command-line-args'
+
 import { locateFiles } from './helpers'
+
+export { loadSVG, parseColor } from './helpers'
 
 const debug = Debug('sqip')
 
 const mainKeys = ['originalWidth', 'originalHeight', 'width', 'height', 'type']
 
-const paletteKeys = [
+const PALETTE_KEYS: (keyof Palette)[] = [
   'Vibrant',
   'DarkVibrant',
   'LightVibrant',
@@ -24,9 +29,100 @@ const paletteKeys = [
   'LightMuted'
 ]
 
+export interface SqipResult {
+  content: Buffer
+  metadata: SqipImageMetadata
+}
+
+export interface SqipCliOptionDefinition extends OptionDefinition {
+  description?: string
+  required?: boolean
+  default?: boolean
+}
+
+export interface PluginOptions {
+  [key: string]: unknown
+}
+
+interface PluginResolver {
+  name: string
+  options?: PluginOptions
+}
+
+interface SqipOptions {
+  input: string | Buffer
+  outputFileName?: string
+  output?: string
+  silent?: boolean
+  parseableOutput?: boolean
+  plugins?: PluginType[]
+  width?: number
+}
+
+interface SqipConfig {
+  input: string | Buffer
+  outputFileName?: string
+  output?: string
+  silent?: boolean
+  parseableOutput?: boolean
+  plugins: PluginType[]
+  width?: number
+}
+
+interface ProcessFileOptions {
+  buffer: Buffer
+  outputFileName: string
+  config: SqipConfig
+}
+
+export interface SqipImageMetadata {
+  originalWidth: number
+  originalHeight: number
+  palette: Palette
+  height: number
+  width: number
+  type: 'unknown' | 'pixel' | 'svg'
+  [key: string]: unknown
+}
+
+type PluginType = PluginResolver | string
+
+export interface SqipPluginOptions {
+  pluginOptions: PluginOptions
+  options: PluginOptions
+  sqipConfig: SqipConfig
+}
+interface SqipPluginInterface {
+  sqipConfig: SqipConfig
+  apply(
+    imageBuffer: Buffer,
+    metadata?: SqipImageMetadata
+  ): Promise<Buffer> | Buffer
+}
+export class SqipPlugin implements SqipPluginInterface {
+  public sqipConfig: SqipConfig
+  public options: PluginOptions
+  static cliOptions: SqipCliOptionDefinition[]
+
+  constructor(options: SqipPluginOptions) {
+    const { sqipConfig } = options
+    this.sqipConfig = sqipConfig || {}
+    this.options = {}
+  }
+  apply(
+    imageBuffer: Buffer,
+    metadata: SqipImageMetadata
+  ): Promise<Buffer> | Buffer {
+    console.log(metadata)
+    return imageBuffer
+  }
+}
+
 // Resolves plugins based on a given config
 // Array of plugin names or config objects, even mixed.
-export async function resolvePlugins(plugins) {
+export async function resolvePlugins(
+  plugins: PluginType[]
+): Promise<(PluginResolver & { Plugin: typeof SqipPlugin })[]> {
   return Promise.all(
     plugins.map(async (plugin) => {
       if (typeof plugin === 'string') {
@@ -58,7 +154,11 @@ export async function resolvePlugins(plugins) {
   )
 }
 
-async function processFile({ buffer, outputFileName, config }) {
+async function processFile({
+  buffer,
+  outputFileName,
+  config
+}: ProcessFileOptions) {
   const { output, silent, parseableOutput } = config
   const result = await processImage({ buffer, config })
   const { content, metadata } = result
@@ -122,98 +222,127 @@ async function processFile({ buffer, outputFileName, config }) {
     }
 
     // Metadata
-    const tableConfig = parseableOutput && {
-      chars: {
-        top: '',
-        'top-mid': '',
-        'top-left': '',
-        'top-right': '',
-        bottom: '',
-        'bottom-mid': '',
-        'bottom-left': '',
-        'bottom-right': '',
-        left: '',
-        'left-mid': '',
-        mid: '',
-        'mid-mid': '',
-        right: '',
-        'right-mid': '',
-        middle: ' '
-      },
-      style: { 'padding-left': 0, 'padding-right': 0 }
-    }
+    const tableConfig = parseableOutput
+      ? {
+          chars: {
+            top: '',
+            'top-mid': '',
+            'top-left': '',
+            'top-right': '',
+            bottom: '',
+            'bottom-mid': '',
+            'bottom-left': '',
+            'bottom-right': '',
+            left: '',
+            'left-mid': '',
+            mid: '',
+            'mid-mid': '',
+            right: '',
+            'right-mid': '',
+            middle: ' '
+          },
+          style: { 'padding-left': 0, 'padding-right': 0 }
+        }
+      : undefined
 
     // Figure out which metadata keys to show
-    const allKeys = [...mainKeys, 'palette']
-    const restMetadata = { ...metadata }
-    allKeys.forEach((k) => delete restMetadata[k])
+    // @todo why is this unused?
+    // const allKeys = [...mainKeys, 'palette']
 
     const mainTable = new Table(tableConfig)
     mainTable.push(mainKeys)
-    mainTable.push(mainKeys.map((key) => metadata[key]))
+    mainTable.push(
+      mainKeys.map((key) => String(metadata[key]) || 'can not display')
+    )
     console.log(mainTable.toString())
 
     // Show color palette
     const paletteTable = new Table(tableConfig)
-    paletteTable.push(paletteKeys)
+    paletteTable.push(PALETTE_KEYS)
     paletteTable.push(
-      paletteKeys
-        .map((key) => metadata.palette[key].getHex())
+      PALETTE_KEYS.map((key) => metadata.palette[key]?.hex)
+        .filter<string>((hex): hex is string => typeof hex === 'string')
         .map((hex) => chalk.hex(hex)(hex))
     )
     console.log(paletteTable.toString())
 
-    Object.keys(restMetadata).forEach((key) => {
-      console.log(chalk.bold(`${key}:`))
-      console.log(restMetadata[key])
-    })
+    Object.keys(metadata)
+      .filter((key) => ![...mainKeys, 'palette'].includes(key))
+      .forEach((key) => {
+        console.log(chalk.bold(`${key}:`))
+        console.log(metadata[key])
+      })
   }
 
   return result
 }
 
-async function processImage({ buffer, config }) {
+interface ProcessImageOptions {
+  buffer: Buffer
+  config: SqipConfig
+}
+
+async function processImage({
+  buffer,
+  config
+}: ProcessImageOptions): Promise<SqipResult> {
   const originalSizes = imageSize.sync(buffer)
   const vibrant = Vibrant.from(buffer)
   const palette = await vibrant.quality(0).getPalette()
-  let metadata = {
+
+  if (!originalSizes) {
+    throw new Error('Unable to get image size')
+  }
+
+  const metadata: SqipImageMetadata = {
     originalWidth: originalSizes.width,
     originalHeight: originalSizes.height,
-    palette
+    palette,
+    // @todo this should be set by plugins and detected initially
+    type: 'unknown',
+    width: 0,
+    height: 0
   }
 
   // Load plugins
   const plugins = await resolvePlugins(config.plugins)
 
-  // Interate through plugins and apply them to last returned image
-  if (config.width > 0) {
+  // Determine output image size
+  if (config.width && config.width > 0) {
     // Resize to desired output width
-    buffer = await sharp(buffer).resize(config.width).toBuffer()
+    try {
+      buffer = await sharp(buffer).resize(config.width).toBuffer()
 
-    const resizedMetadata = await sharp(buffer).metadata()
-    metadata.width = resizedMetadata.width
-    metadata.height = resizedMetadata.height
+      const resizedMetadata = await sharp(buffer).metadata()
+      metadata.width = resizedMetadata.width || 0
+      metadata.height = resizedMetadata.height || 0
+    } catch (err) {
+      throw new Error('Unable to resize')
+    }
   } else {
     // Fall back to original size, keep image as is
     metadata.width = originalSizes.width
     metadata.height = originalSizes.height
   }
 
+  // Interate through plugins and apply them to last returned image
   for (const { name, options: pluginOptions, Plugin } of plugins) {
     debug(`Construct ${name}`)
     const plugin = new Plugin({
       sqipConfig: config,
-      pluginOptions,
-      metadata
+      pluginOptions: pluginOptions || {},
+      options: {}
     })
     debug(`Apply ${name}`)
-    buffer = await plugin.apply(buffer)
+    buffer = await plugin.apply(buffer, metadata)
   }
 
   return { content: buffer, metadata }
 }
 
-export default async function sqip(options) {
+export default async function sqip(
+  options: SqipOptions
+): Promise<SqipResult | SqipResult[]> {
   // Build configuration based on passed options and default options
   const defaultOptions = {
     plugins: [
@@ -227,16 +356,16 @@ export default async function sqip(options) {
     silent: true
   }
 
-  const config = Object.assign({}, defaultOptions, options)
+  const config: SqipConfig = Object.assign({}, defaultOptions, options)
 
   const { input, outputFileName, parseableOutput, silent } = config
 
   if (parseableOutput) {
-    chalk.enabled = false
+    chalk.level = 0
   }
 
   // Validate configuration
-  if (!input) {
+  if (!input || input.length === 0) {
     throw new Error(
       'Please provide an input image, e.g. sqip({ input: "input.jpg" })'
     )
@@ -244,6 +373,11 @@ export default async function sqip(options) {
 
   // If input is a Buffer
   if (Buffer.isBuffer(input)) {
+    if (!outputFileName) {
+      throw new Error(
+        `${outputFileName} is required when passing image as buffer`
+      )
+    }
     return processFile({
       buffer: input,
       outputFileName,
@@ -291,13 +425,6 @@ export default async function sqip(options) {
     return results
   }
   return results[0]
-}
-
-export class SqipPlugin {
-  constructor({ sqipConfig, metadata }) {
-    this.sqipConfig = sqipConfig || {}
-    this.metadata = metadata || {}
-  }
 }
 
 export * from './helpers'
